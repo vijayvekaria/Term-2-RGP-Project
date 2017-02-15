@@ -19,4 +19,12 @@ public class ColourSensor {
 		colourSensorProvider.fetchSample(colourSample, 0);
 		return colourSample[0];
 	}
+	
+	public boolean getLineReading(){
+		float measure = getColourReading();
+		if (measure > 0.5){
+			return true;
+		}
+		return false;
+	}
 }
