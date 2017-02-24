@@ -1,5 +1,7 @@
 public class Main
 {
+	
+	//location of segment no. 19 at cell [18][7]
 	public static void main(String[] args)
 	{
 		int[][] grid = new int[35][27];
