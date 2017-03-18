@@ -11,34 +11,52 @@ public final class GyroSensor {
 	static SampleProvider gyroSensorProvidor = gyroSensor.getAngleMode();
 	static float[] gyroSample = new float[gyroSensorProvidor.sampleSize()];
 	
-	static float startingAngle;
-	static float tempAngle;
+	static float tempAngle;			//Stores a temporary reference angle.
 	
 	private GyroSensor() {}
 	
-	public static void initialiseGyro(){
+	/**
+	 * Sets the start orientation of the robot to 0 degrees. Sensor measurements are given relative to this orientation.
+	 */
+	public void initialiseSensor(){
+		gyroSensor.reset();
+	}
+	
+	/**
+	 * Gets the current angle of sensor relative to the start orientation.
+	 * @return A float that is the current angle.
+	 */
+	public static float getAngle(){
 		gyroSensorProvidor.fetchSample(gyroSample, 0);
-		startingAngle = gyroSample[0];
+		return gyroSample[0];
 	}
 	
-	public static float getStartingAngle() {
-		return startingAngle;
-	}
-	
-	public static void getRelativeAngle(){
-		gyroSensorProvidor.fetchSample(gyroSample, 0);
-		startingAngle = gyroSample[0];
-	}
-	
+	/**
+	 * Gets the current angle and stores it in a temporary variable so an angle relative to another orientation can be given without altering the starting orientation.
+	 */
 	public static void setTempAngle() {
-		gyroSensorProvidor.fetchSample(gyroSample, 0);
-		tempAngle = gyroSample[0];
+		tempAngle = getAngle();
 	}
 	
-	public static float getAngleDifference(){
-		gyroSensorProvidor.fetchSample(gyroSample, 0);
-		return tempAngle - gyroSample[0];
+	/**
+	 * Gets the temporary reference angle.
+	 * @return The angle of a set temporary referenced orientation.
+	 */
+	public static float getTempAngle() {
+		return tempAngle;
 	}
+	
+	/**
+	 * Calculates the relative angle to a set temporary orientation.
+	 * @return The relative angle to a set temporary reference.
+	 */
+	public static float getTempAngleDifference(){
+		return tempAngle - getAngle();
+	}
+	
+	
+	
+
 	
 
 }
