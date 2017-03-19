@@ -1,10 +1,10 @@
-package main;
+package src;
 
 public class Main {
 	public Main() {
 		Grid grid = new Grid();
 		Localiser.start();
-		GyroSensor.initialiseGyro();
+		GyroSensor.initialiseSensor();
 		
 	}
 	public static void main(String[] args) {

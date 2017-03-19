@@ -1,4 +1,4 @@
-package main;
+package src;
 
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.port.Port;
@@ -18,7 +18,7 @@ public final class GyroSensor {
 	/**
 	 * Sets the start orientation of the robot to 0 degrees. Sensor measurements are given relative to this orientation.
 	 */
-	public void initialiseSensor(){
+	public static void initialiseSensor(){
 		gyroSensor.reset();
 	}
 	
