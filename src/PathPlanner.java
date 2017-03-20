@@ -1,5 +1,6 @@
 package src;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -19,7 +20,7 @@ public class PathPlanner {
 	private static Cell end;
 
 	
-	public static LinkedList<Cell> GetOptimalPath(Grid inputGrid, Cell inputStart, Cell inputEnd) throws PathNotFoundException
+	public static ArrayList<Cell> GetOptimalPath(Grid inputGrid, Cell inputStart, Cell inputEnd) throws PathNotFoundException
 	{
 		grid = inputGrid;
 		start = inputStart;
@@ -114,7 +115,7 @@ public class PathPlanner {
 			cell.setPartOfPath(false);
 		}
 		
-		return returnList;
+		return new ArrayList<Cell>(returnList);
 	}
 	
 	private static void inspectSurroundingCells(Cell CellToCheck){

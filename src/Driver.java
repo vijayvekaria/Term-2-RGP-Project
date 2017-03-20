@@ -1,5 +1,9 @@
 package src;
 
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.LinkedList;
+
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.port.MotorPort;
 import lejos.robotics.RegulatedMotor;
@@ -18,42 +22,60 @@ public final class Driver{
 
 	private Driver() {}
 	
+	public void traversePath(ArrayList<Cell> path){
+		Cell currentCell;
+		Cell previousCell = path.get(0);
+		for (int i = 1; i < path.size() - 1; ++i){
+			currentCell = path.get(i);
+			if (currentCell.getX() == previousCell.getX()){
+				if (currentCell.getY() < previousCell.getY()){
+					rotateTo(getCurrentAngleTo360() - 90);
+					moveToNextCell();
+				} else {
+					rotateTo(getCurrentAngleTo360() + 90);
+					moveToNextCell();
+				}
+			} else {
+				if (currentCell.getX() < previousCell.getX()){
+					rotateTo(getCurrentAngleTo360() + 180);
+					moveToNextCell();
+				} else {
+					moveToNextCell();
+				}
+			}
+			previousCell = currentCell;
+		}
+	}
+	
 	/**
 	 * Rotates robot to a specific orientation given a bearing (0 - 360).
 	 * @param degrees The bearing to rotate to.
 	 */
 	public void rotateTo(int degrees){
-		int currentAngle = currentAngleTo360();
+		int currentAngle = getCurrentAngleTo360();
 		int rotateAngleDifference = degrees - currentAngle;
-		
 		setMotorSpeed(40);
-		
 		if (rotateAngleDifference <=  (360 - degrees) + currentAngle){
 			rotateAngleDifference = 360 - ((360 - degrees + currentAngle) % 360);
 			startClockwiseRotation();
 			while(rotateAngleDifference > rotationErrorThreshold){
-				currentAngle = currentAngleTo360();
+				currentAngle = getCurrentAngleTo360();
 				rotateAngleDifference = 360 - ((360 - degrees + currentAngle) % 360);
 			}
 		} else {
 			rotateAngleDifference = (360 - degrees + currentAngle) % 360;
 			startAntiClockwiseRotation();
 			while(rotateAngleDifference > rotationErrorThreshold){
-				currentAngle = currentAngleTo360();
+				currentAngle = getCurrentAngleTo360();
 				rotateAngleDifference = (360 - degrees + currentAngle) % 360;
 			}
 		}
 		stop();
 	}
 
-	private int currentAngleTo360() {
-		int currentAngle = 10;
-		System.out.println("input: " + currentAngle);
-		if (currentAngle < 0){
-			currentAngle += 360;
-		}
-		System.out.println("output: " + currentAngle);
-		return currentAngle;
+	private int getCurrentAngleTo360() {
+		int currentAngle = (int) GyroSensor.getAngle();
+		return currentAngle % 360;
 	}
 	
 	private void startClockwiseRotation(){
@@ -97,7 +119,15 @@ public final class Driver{
 		rightMotor.stop();
 		endSync();
 	}
-
+	
+	private static void moveToNextCell(){
+		setMotorSpeed(51);
+		moveForward();
+		try { Thread.sleep(2000); } catch (InterruptedException e) { e.printStackTrace(); }
+		stop();
+		try { Thread.sleep(2000); } catch (InterruptedException e) { e.printStackTrace(); }
+	}
+	
 	public static void moveToNextLineSegment() {
 		setMotorSpeed(41);
 		moveForward();
