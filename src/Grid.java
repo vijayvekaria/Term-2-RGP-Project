@@ -6,15 +6,13 @@ public class Grid {
 	private static int yHeight = 27;
 	private static Cell[][] grid = new Cell[xLength][yHeight];
 
-	private static final int firstBlockLocation = 1; //1 = left, 2 = middle, 3 = right
+	private static final int firstBlockLocation = 1; //1 = left, 2 = middle
 
-	
+	// POSSIBLE TARGET FOR THE GOAL FROM START IS (11,20)
 	
 	public Grid() {
 		createGrid();
 		setFalseHeuristics();
-		printGrid();
-		//printLine();
 		System.out.println(" ");
 	}
 
@@ -27,70 +25,6 @@ public class Grid {
 	}
 	
 	private void setFalseHeuristics() {
-//		int triangleCounter = 1;
-//		for (int x = 19; x < 25; ++x){
-//			for (int y = 0; y < triangleCounter; ++y){
-//				grid[x][y].setTraversable(false);
-//			}
-//			++triangleCounter;
-//		}
-//
-//		int triangleCounter1 = 6;
-//		for (int x = 0; x < 6; ++x){
-//			for (int y = 24; y > 25 - triangleCounter1; --y){
-//				grid[x][y].setTraversable(false);
-//			}
-//			--triangleCounter1;
-//		}
-//
-//		//for the first test the right half of the board will be blocked
-//		for (int i = 12; i < xLength; i++) {
-//			grid[i][13].setTraversable(false);
-//		}
-//
-//		//sets where the first block will be
-//		int startingCell = 1;
-//		switch(firstBlockLocation){
-//			case 1: startingCell = 3;
-//				break;
-//			case 2: startingCell = 5;
-//				break;
-//			case 3: startingCell = 7;
-//				break;
-//		}
-//		for (int y = -1; y <= 1; y++) {
-//			for (int x = -1; x <=1 ; x++) {
-//				grid[startingCell + x][13 + y].setTraversable(false);
-//			}
-//		}
-//
-//
-//
-//
-//		//set your own blocks with these for loops
-//
-////		for (int i = 1; i < xLength; i++) {
-////			grid[i][13].setTraversable(false);
-////		}
-////		for (int i = 1; i < 13; i++) {
-////			grid[1][i].setTraversable(false);
-////		}
-////		for (int i = 1; i < 13; i++) {
-////			grid[9][i].setTraversable(false);
-////		}
-
-
-
-		//the real board
-		for(int y = 0; y < 27; y++){
-			for(int x = 0; x < 35; x++){
-				//grid[x][y] = 0;
-				//System.out.print(grid[x][y]);
-				//count++;
-			}
-			//count = 0;
-			//System.out.println();
-		}
 
 		int count = 13;
 		for(int y = 0; y < 14; y++){
@@ -127,42 +61,55 @@ public class Grid {
 			}
 			count4++;
 		}
-
-		//int count = 0;
-
-//		for(int y = 0; y < 27; y++){
-//			for(int x = 0; x < 35; x++){
-//				System.out.print(grid[x][y]);
-//
-//			}
-//			System.out.println();
-//		}
+		//set wall
+		for (int i = 12; i < 23; i++){
+			grid[i][13].setTraversable(false);
+		}
+		//closer to the wall
+		if(firstBlockLocation == 2){
+			for (int i = 6; i < 12; i++) {
+				grid[i][13].setTraversable(false);
+				
+			}
+		}
+		//on the far left side
+		else if(firstBlockLocation == 1){
+			for (int i = 1; i < 8; i++) {
+				grid[i][13].setTraversable(false);
+				
+			}
+		}
+		
+		for(int i = 20; i < 27; i++) {
+			grid[13][i].setTraversable(false);
+		}
 
 
 	}
 
 	
 	public void printGrid(){
-		for(int y = 0; y < yHeight; y++)
+		for(int y = yHeight - 1; y >=0; y--)
 		{
 			for(int x = 0; x < xLength; x++)
 			{
 				if(!grid[x][y].getTraversable())
 				{
-					System.out.print("\u001B[41m" + "\u001B[31m" + "X " + "\u001B[0m");
+					System.out.print("X "); //("\u001B[41m" + "\u001B[31m" + "X " + "\u001B[0m");
 				}
 				else if(grid[x][y].isPartOfPath()){
-					System.out.print("\u001B[42m" + "\u001B[32m" + "# " + "\u001B[0m");
+					System.out.print("# "); //("\u001B[42m" + "\u001B[32m" + "# " + "\u001B[0m");
 
 				}
 				else
 				{
-					System.out.print("\u001B[47m" + "\u001B[37m" + "O " + "\u001B[0m");
+					System.out.print("O "); //("\u001B[47m" + "\u001B[37m" + "O " + "\u001B[0m");
 				}
 				
 			}
-			System.out.println();
+			System.out.println(" " + y);
 		}
+		System.out.println("(0,0) starts from bottom left corner");
 	}
 	
 	public void printLine()
@@ -192,5 +139,22 @@ public class Grid {
 		return yHeight;
 	}
 	
+	public void setGreen(){
+		for (int i = 0; i < 27; i++) {
+			grid[i][13].setTraversable(false);
+		}
+		
+	}
 	
+	public void setRed(){
+		for (int i = 0; i < 22; i++) {
+			grid[i][13].setTraversable(false);
+		}
+		
+		for (int i = 28; i < xLength; i++) {
+			grid[i][13].setTraversable(false);
+		}
+		
+
+	}
 }
