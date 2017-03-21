@@ -18,7 +18,7 @@ public final class Driver{
 	/**
 	 * The number of degrees to adjust rotation from a given point.
 	 */
-	int rotationErrorThreshold = 3;
+	static int rotationErrorThreshold = 3;
 
 	private Driver() {}
 	
@@ -51,7 +51,7 @@ public final class Driver{
 	 * Rotates robot to a specific orientation given a bearing (0 - 360).
 	 * @param degrees The bearing to rotate to.
 	 */
-	public void rotateTo(int degrees){
+	public static void rotateTo(int degrees){
 		int currentAngle = getCurrentAngleTo360();
 		int rotateAngleDifference = degrees - currentAngle;
 		setMotorSpeed(40);
@@ -73,26 +73,26 @@ public final class Driver{
 		stop();
 	}
 
-	private int getCurrentAngleTo360() {
+	private static int getCurrentAngleTo360() {
 		int currentAngle = (int) GyroSensor.getAngle();
 		return currentAngle % 360;
 	}
 	
-	private void startClockwiseRotation(){
+	private static void startClockwiseRotation(){
 		startSync();
 		leftMotor.forward();
 		rightMotor.backward();
 		endSync();
 	}
 	
-	private void startAntiClockwiseRotation(){
+	private static void startAntiClockwiseRotation(){
 		startSync();
 		leftMotor.backward();
 		rightMotor.forward();
 		endSync();
 	}
 	
-	private static void setMotorSpeed(int speed){
+	public static void setMotorSpeed(int speed){
 		leftMotor.setSpeed(speed);
 		rightMotor.setSpeed(speed);
 	}
@@ -106,14 +106,21 @@ public final class Driver{
 		leftMotor.startSynchronization();
 	}
 
-	private static void moveForward() {
+	public static void moveForward() {
 		startSync();
 		leftMotor.forward();
 		rightMotor.forward();
 		endSync();
 	}
+	
+	public static void moveBackward() {
+		startSync();
+		leftMotor.backward();
+		rightMotor.backward();
+		endSync();
+	}
 
-	private static void stop() {
+	public static void stop() {
 		startSync();
 		leftMotor.stop();
 		rightMotor.stop();
