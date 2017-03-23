@@ -1,33 +1,5 @@
 package testing;
 
-import lejos.hardware.ev3.LocalEV3;
-import lejos.hardware.lcd.TextLCD;
-import lejos.hardware.motor.EV3LargeRegulatedMotor;
-import lejos.hardware.port.MotorPort;
-import lejos.hardware.port.Port;
-import lejos.hardware.sensor.EV3GyroSensor;
-import lejos.internal.ev3.EV3LCD;
-import lejos.robotics.RegulatedMotor;
-import lejos.robotics.SampleProvider;
-import lejos.robotics.navigation.DifferentialPilot;
-
-public class MotorTest 
-{
-	
-	
-	//off bypackage testing;
-
-import lejos.hardware.ev3.LocalEV3;
-import lejos.hardware.lcd.TextLCD;
-import lejos.hardware.motor.EV3LargeRegulatedMotor;
-import lejos.hardware.port.MotorPort;
-import lejos.hardware.port.Port;
-import lejos.hardware.sensor.EV3GyroSensor;
-import lejos.internal.ev3.EV3LCD;
-import lejos.robotics.RegulatedMotor;
-import lejos.robotics.SampleProvider;
-import lejos.robotics.navigation.DifferentialPilot;
-
 public class MotorTest 
 {
 	
