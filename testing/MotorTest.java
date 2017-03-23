@@ -1,5 +1,15 @@
 package testing;
 
+import lejos.hardware.ev3.LocalEV3;
+import lejos.hardware.lcd.TextLCD;
+import lejos.hardware.port.MotorPort;
+import lejos.hardware.port.Port;
+import lejos.hardware.sensor.EV3GyroSensor;
+import lejos.robotics.RegulatedMotor;
+import lejos.robotics.SampleProvider;
+import lejos.robotics.navigation.DifferentialPilot;
+import lejos.hardware.motor.EV3LargeRegulatedMotor;
+
 public class MotorTest 
 {
 	static RegulatedMotor leftMotor = new EV3LargeRegulatedMotor(MotorPort.A);
@@ -62,7 +72,6 @@ public class MotorTest
 			}
 	
 		}
-	}
 
 	public void rotate(int direction) {
 		

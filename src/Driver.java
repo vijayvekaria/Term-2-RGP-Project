@@ -18,27 +18,39 @@ public final class Driver{
 
 	private Driver() {}
 	
-	public void traversePath(ArrayList<Cell> path){
+	public static void traversePath(ArrayList<Cell> path){
 		Cell currentCell;
 		Cell previousCell = path.get(0);
-		for (int i = 1; i < path.size() - 1; ++i){
+		for (int i = 1; i < path.size(); ++i){
 			currentCell = path.get(i);
-			if (currentCell.getX() == previousCell.getX()){
-				if (currentCell.getY() < previousCell.getY()){
-					rotateTo(getCurrentAngleTo360() - 90);
-					moveToNextCell();
+			int prevX = previousCell.getX();
+			int prevY = previousCell.getY();
+			int currX = currentCell.getX();
+			int currY = currentCell.getY();
+			if (prevY == currY){
+				if (prevX < currX){
+					System.out.println("Rotating 90");
+					rotateTo(90);
 				} else {
-					rotateTo(getCurrentAngleTo360() + 90);
-					moveToNextCell();
+					System.out.println("Rotating -90");
+					rotateTo(-90);
 				}
 			} else {
-				if (currentCell.getX() < previousCell.getX()){
-					rotateTo(getCurrentAngleTo360() + 180);
-					moveToNextCell();
-				} else {
-					moveToNextCell();
+				if (prevY > currY){
+					System.out.println("Rotating 180");
+					rotateTo(180);
+				} else { 
+					System.out.println("Rotating 0");
+					rotateTo(0);
 				}
 			}
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			moveToNextCell();
 			previousCell = currentCell;
 		}
 	}
@@ -48,47 +60,74 @@ public final class Driver{
 	 * @param degrees The bearing to rotate to.
 	 */
 	public static void rotateTo(int degrees){
-		int targetAngle = degrees;
-		int currentAngle = getCurrentAngleTo360();
-		setMotorSpeed(60);
-		int acw;
-		int cw;
-		if (currentAngle < targetAngle){
-			acw = (360 - targetAngle) + (currentAngle);
-			cw = 360 - acw;
-			if (cw < acw){
-				startClockwiseRotation();
-				while (currentAngle < targetAngle){
-					currentAngle = getCurrentAngleTo360();
+		
+		int errorAdjustment = 0;
+		int currentAngle = (int) GyroSensor.getAngle();
+		
+		if(currentAngle == degrees){
+			System.out.println("already facing correct direction");
+
+			return;
+		}
+		setMotorSpeed(110);
+		switch(degrees){
+			case -90:
+				while (degrees + errorAdjustment < currentAngle){
+					startAntiClockwiseRotation();
+					currentAngle = (int) GyroSensor.getAngle();
 				}
-			} else {
-				startAntiClockwiseRotation();
-				while ((180 + currentAngle) > ((targetAngle + 180) % 360)){
-					currentAngle = getCurrentAngleTo360();
+				//stop();
+				break; 
+			case 0:
+				if (currentAngle < 0) {
+					while (currentAngle < degrees){
+						startClockwiseRotation();
+						currentAngle = (int) GyroSensor.getAngle();
+					}
+					//stop();
+					break; 
+				} else {
+					while (currentAngle > degrees){
+						startAntiClockwiseRotation();
+						currentAngle = (int) GyroSensor.getAngle();
+					}
+					//stop();
+					break; 
 				}
-			}
-		} else {
-			cw = (360 - currentAngle) + (targetAngle);
-			acw = 360 - cw;
-			if (cw < acw){
-				startClockwiseRotation();
-				while (((180 + currentAngle) % 360) < (targetAngle + 180)){
-					currentAngle = getCurrentAngleTo360();
+			case 90:
+				while (currentAngle < degrees - errorAdjustment){
+					startClockwiseRotation();
+					currentAngle = (int) GyroSensor.getAngle();
 				}
-			} else {
-				startAntiClockwiseRotation();
-				while (targetAngle < currentAngle){
-					currentAngle = getCurrentAngleTo360();
+				//stop();
+				break; 
+			case 180:
+				if (currentAngle < 0) {
+					while (currentAngle > -degrees + errorAdjustment){
+						startAntiClockwiseRotation();
+						currentAngle = (int) GyroSensor.getAngle();
+					}
+					//stop();
+					GyroSensor.initialiseSensor();
+					break; 
+				} else {
+					while (currentAngle < degrees - errorAdjustment){
+						startClockwiseRotation();
+						currentAngle = (int) GyroSensor.getAngle();
+					}
+					//stop();
+					break; 
 				}
-			}
+				
+			case 45:
+				while (currentAngle < degrees){
+					startClockwiseRotation();
+					currentAngle = (int) GyroSensor.getAngle();
+				}
+				//stop();
+				break; 
 		}
 		stop();
-	}
-
-	private static int getCurrentAngleTo360() {
-		int currentAngle = (int) GyroSensor.getAngle();
-		if (currentAngle < 0) return (currentAngle + 360);
-		return currentAngle;
 	}
 	
 	private static void startClockwiseRotation(){
@@ -157,13 +196,10 @@ public final class Driver{
 	}
 
 	public static void goToLineSegment(int location){
-		Driver.moveToLocation(location+1);
-	}
-	
-	public static void moveToLocation(int location){
-		setMotorSpeed(41);	
-		moveForward();	
-		try { Thread.sleep(1000*(30-location)); } catch (InterruptedException e) { e.printStackTrace(); }
+		location += 1;
+		setMotorSpeed(82);	
+		moveBackward();	
+		try { Thread.sleep(500*(location-11)); } catch (InterruptedException e) { e.printStackTrace(); }
 		stop();
 	}
 }

@@ -62,7 +62,17 @@ public class Grid {
 			count4++;
 		}
 		//set wall
-		for (int i = 12; i < 23; i++){
+		for (int i = 11; i < 23; i++){
+			grid[i][13].setTraversable(false);
+		}
+		grid[22][12].setTraversable(false);
+		grid[22][14].setTraversable(false);
+		
+		grid[11][12].setTraversable(false);
+		grid[11][14].setTraversable(false);
+		
+		//set right side of map as blocked
+		for (int i = 22; i < xLength; i++){
 			grid[i][13].setTraversable(false);
 		}
 		//closer to the wall
@@ -71,13 +81,18 @@ public class Grid {
 				grid[i][13].setTraversable(false);
 				
 			}
+			grid[6][12].setTraversable(false);
+			grid[6][14].setTraversable(false);
 		}
+		
 		//on the far left side
 		else if(firstBlockLocation == 1){
-			for (int i = 1; i < 8; i++) {
+			for (int i = 1; i < 10; i++) {
 				grid[i][13].setTraversable(false);
 				
 			}
+			grid[9][12].setTraversable(false);
+			grid[9][14].setTraversable(false);
 		}
 		
 		for(int i = 20; i < 27; i++) {
@@ -143,6 +158,11 @@ public class Grid {
 		for (int i = 0; i < 27; i++) {
 			grid[i][13].setTraversable(false);
 		}
+		for (int i = 27; i < xLength - 1; i++) {
+			grid[i][13].setTraversable(true);
+		}
+		grid[26][12].setTraversable(false);
+		grid[26][14].setTraversable(false);
 		
 	}
 	
@@ -151,10 +171,17 @@ public class Grid {
 			grid[i][13].setTraversable(false);
 		}
 		
+		for (int i = 23; i < 28; i++) {
+			grid[i][13].setTraversable(true);
+		}
+		
 		for (int i = 28; i < xLength; i++) {
 			grid[i][13].setTraversable(false);
 		}
 		
+		grid[28][12].setTraversable(false);
+		grid[28][14].setTraversable(false);
+
 
 	}
 }

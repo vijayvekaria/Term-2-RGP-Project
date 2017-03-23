@@ -22,6 +22,7 @@ public class PathPlanner {
 	
 	public static ArrayList<Cell> GetOptimalPath(Grid inputGrid, Cell inputStart, Cell inputEnd) throws PathNotFoundException
 	{
+		
 		grid = inputGrid;
 		start = inputStart;
 		end = inputEnd;
@@ -97,9 +98,10 @@ public class PathPlanner {
 		//create linked list here
 		Cell currentCell = end;
 		LinkedList<Cell> returnList = new LinkedList<Cell>();
-		//returnList.addFirst(currentCell);
+		returnList.addFirst(currentCell);
+		
 		while(currentCell.getCameFrom() != null){
-			//System.out.println(currentCell.getX() + "," + currentCell.getY());
+			System.out.println(currentCell.getX() + "," + currentCell.getY());
 			returnList.addFirst(currentCell);
 			currentCell.setPartOfPath(true);
 			currentCell = currentCell.getCameFrom();
@@ -115,9 +117,22 @@ public class PathPlanner {
 			cell.setPartOfPath(false);
 		}
 		
+		
+		resetCameFrom();
 		return new ArrayList<Cell>(returnList);
 	}
 	
+	private static void resetCameFrom() {
+		for (int i = 0; i < grid.getXLength(); i++) {
+			for (int j = 0; j < grid.getYHeight(); j++) {
+				grid.getCell(i, j).setCameFrom(null);
+				
+			}
+			
+		}
+		
+	}
+
 	private static void inspectSurroundingCells(Cell CellToCheck){
 		//for x values (1 to left and right of square)
 		for (int i = -1; i < 2; i+= 2) {

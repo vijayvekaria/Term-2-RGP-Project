@@ -9,7 +9,7 @@ public final class ColourSensor {
 	static Port colourSensorPort = LocalEV3.get().getPort("S2");
 	static EV3ColorSensor colourSensor = new EV3ColorSensor(colourSensorPort);
 	static SampleProvider colourSensorProvider = colourSensor.getRedMode();
-	static float[] colourSample = new float[colourSensorProvider.sampleSize()];
+	static float[] colourSample = new float[3];
 	
 	private  ColourSensor() {}
 	
@@ -24,5 +24,14 @@ public final class ColourSensor {
 			return true;
 		}
 		return false;
+	}
+	
+	public static void setRGBMode(){
+		colourSensorProvider = colourSensor.getRGBMode();
+	}
+	
+	public static float getGreenReading(){
+		colourSensorProvider.fetchSample(colourSample, 0);
+		return colourSample[1];
 	}
 }
