@@ -30,6 +30,9 @@ public class MotorTest
 	{
 		MotorTest test = new MotorTest();
 		//test.forwardTest();
+		//test.backwardTest();
+		//test.rotationTest();
+		//test.advancedRotationTest();
 	}
 
 	private void rotationTest() 
@@ -62,10 +65,10 @@ public class MotorTest
 // //			
 // //			leftMotor.endSynchronization();
 			
-			rotate(1);
+			rotate(1); //1 == clockwise
 			
 			try {
-				Thread.sleep(500);
+				Thread.sleep(5000); //waits 5 seconds facing new direction
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -123,6 +126,130 @@ public class MotorTest
 		
 		leftMotor.endSynchronization();
 	}
+	
+	public void advancedRotationTest() {
+		//first 50cm northbound
+		leftMotor.setSpeed(552); //50cm per 2 seconds
+		rightMotor.setSpeed(551);
+		
+		leftMotor.synchronizeWith(syncList);
+		leftMotor.startSynchronization();
+			
+		leftMotor.forward();
+		rightMotor.forward();
+			
+		leftMotor.endSynchronization();
+			
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		leftMotor.synchronizeWith(syncList);
+		leftMotor.startSynchronization();
+		
+		leftMotor.stop();
+		rightMotor.stop();
+		
+		leftMotor.endSynchronization();
+		
+		
+		//rotate 90 anticlock
+		
+		rotate(0); //0 ==  anticlockwise
+		
+		//second 30cm westbound
+		
+		leftMotor.setSpeed(102); //30cm per 2 seconds
+		rightMotor.setSpeed(102);
+		
+		leftMotor.synchronizeWith(syncList);
+		leftMotor.startSynchronization();
+			
+		leftMotor.forward();
+		rightMotor.forward();
+			
+		leftMotor.endSynchronization();
+		
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		leftMotor.synchronizeWith(syncList);
+		leftMotor.startSynchronization();
+		
+		leftMotor.stop();
+		rightMotor.stop();
+		
+		leftMotor.endSynchronization();
+		
+		
+		//rotate 45 degrees clockwise
+		
+		gyro.reset();
+		
+		leftMotor.setSpeed(40);
+		rightMotor.setSpeed(40);
+		
+		gyroProvider.fetchSample(gyroSample, 0);
+		
+		leftMotor.synchronizeWith(syncList);
+		leftMotor.startSynchronization();
+			
+		leftMotor.forward();
+		rightMotor.forward();
+			
+		leftMotor.endSynchronization();
+		
+		while(gyroSample[0] <= 44) {
+			screen.clear();
+			screen.drawString(gyroSample[0] + "", 0, 1);
+			gyroProvider.fetchSample(gyroSample, 0);
+		}
+		
+		leftMotor.synchronizeWith(syncList);
+		leftMotor.startSynchronization();
+		
+		leftMotor.stop();
+		rightMotor.stop();
+		
+		leftMotor.endSynchronization();
+		
+		//30cm northeast bound
+		
+		leftMotor.setSpeed(102); //30cm per 2 seconds
+		rightMotor.setSpeed(102);
+		
+		leftMotor.synchronizeWith(syncList);
+		leftMotor.startSynchronization();
+			
+		leftMotor.forward();
+		rightMotor.forward();
+			
+		leftMotor.endSynchronization();
+		
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		leftMotor.synchronizeWith(syncList);
+		leftMotor.startSynchronization();
+		
+		leftMotor.stop();
+		rightMotor.stop();
+		
+		leftMotor.endSynchronization();
+		
+		//measure location error at the final destination
+	}
 
 	public void forwardTest() {
 		
@@ -162,5 +289,45 @@ public class MotorTest
 			}
 		}
 	}
+	
+	public void backwardTest() {
+		
+		leftMotor.setSpeed(41); //2cm per second
+		rightMotor.setSpeed(41);
+		
+		for(int i = 0; i < 10; i++)
+		{
+			leftMotor.synchronizeWith(syncList);
+			leftMotor.startSynchronization();
+			
+			leftMotor.backward();
+			rightMotor.backward();
+			
+			leftMotor.endSynchronization();
+			
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+			leftMotor.startSynchronization();
+			
+			leftMotor.stop();
+			rightMotor.stop();
+			
+			leftMotor.endSynchronization();
+			
+			try {
+				Thread.sleep(8000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
 
 }
