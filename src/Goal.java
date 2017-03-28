@@ -9,10 +9,6 @@ import lejos.robotics.SampleProvider;
 //pass grid class
 
 public class Goal {
-	static Port touchPort = LocalEV3.get().getPort("S3");
-	static EV3TouchSensor touch = new EV3TouchSensor(touchPort);
-	static SampleProvider touchProvider = touch.getTouchMode();	
-	static float[] touchSample = new float[touchProvider.sampleSize()];
 	
 	static TextLCD screen = LocalEV3.get().getTextLCD();
 	static Grid grid;
@@ -28,14 +24,13 @@ public class Goal {
 		
 		Driver.rotateTo(angle);
 		
-		touchProvider.fetchSample(touchSample, 0);
 		timeDif = System.currentTimeMillis();
 		
-		Driver.setMotorSpeed(40);
+		Driver.setMotorSpeed(80);
 		Driver.moveForward();
 		
-		while(touchSample[0] == 0){
-			touchProvider.fetchSample(touchSample, 0);
+		while(!Button.ispressed()){
+			
 		}
 		
 		timeDif = System.currentTimeMillis() - timeDif; 
@@ -49,7 +44,7 @@ public class Goal {
 		ColourSensor.setRGBMode();
 		if(ColourSensor.getGreenReading() > 0.1){
 			grid.setGreen();
-			//screen.drawString("Green identified", 1, 2);
+			screen.drawString("Green identified!!!!!!!!!!!!!!!!!!!!", 1, 2);
 		}
 		else {
 			grid.setRed();
@@ -59,12 +54,11 @@ public class Goal {
 	
 	private static void exitGoal(){
 		//screen.drawString("Backing out", 1, 3);
-		Driver.setMotorSpeed(40);
+		Driver.setMotorSpeed(80);
 		Driver.moveBackward();
 		try { Thread.sleep(timeDif);} catch (InterruptedException e) {e.printStackTrace();}
 		Driver.stop();
 		//screen.drawString("Rotating out", 1, 4);
-		Driver.rotateTo(180);
 	}
 }
 
